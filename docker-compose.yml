@@ -1,47 +1,20 @@
-version: "3.8"
-
 services:
-  # Service for Nginx to serve your Vite app
   nginx:
     build:
-      context: . # Build from the current directory (where Dockerfile is)
-      dockerfile: Dockerfile # Specify the Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: my_portfolio_nginx
-    restart: always # Always restart if it crashes or server reboots
+    restart: always
     ports:
-      - "80:80" # Map host port 80 to container port 80 (for HTTP)
-      - "443:443" # Map host port 443 to container port 443 (for HTTPS)
+      - "80:80"
+      - "443:443"
     volumes:
-      # Mount your custom Nginx configuration into the container
-      # This overrides the default Nginx config
       - ./nginx/nginx-vite.conf:/etc/nginx/conf.d/default.conf:ro
-      # Volumes for Certbot to store/read SSL certificates and challenges
       - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-      # Uncomment if you generate dhparam.pem on the host:
-      # - /etc/nginx/dhparam.pem:/etc/nginx/dhparam.pem:ro
-    networks:
-      - web-network # Connects to our custom network
-
-  # Service for Certbot to manage Let's Encrypt SSL certificates
-  certbot:
-    image: certbot/certbot:latest # Use the official Certbot image
-    container_name: certbot_helper
-    volumes:
-      # These volumes must match the Nginx service's certbot volumes
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-    # Entrypoint to prevent Certbot from running automatically
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $!; done;'"
+      - /etc/letsencrypt:/etc/letsencrypt
     networks:
       - web-network
 
-# Define a custom network for your services to communicate
 networks:
   web-network:
     driver: bridge
-
-# Define volumes for persistent data (Certbot configs/certs)
-volumes:
-  certbot-conf:
-  certbot-www:
