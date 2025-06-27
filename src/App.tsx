@@ -1,61 +1,47 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState, useEffect } from "react";
+import antonySpin from "/antony-spin-4s.gif";
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+const ANTONY_SPIN_RATE = 1333;
 
-  const randomNumber = () => {
-    return Math.floor(Math.random() * 100000) + 1;
-  };
+const getInitialSpinCount = () => {
+  const now = new Date();
+  const midnight = new Date();
+  midnight.setHours(0, 0, 0, 0);
+  return Math.floor(((now.getTime() - midnight.getTime()) / 4000) * 3);
+};
 
-  const formatNumber = (num: number) => {
-    return num.toLocaleString("en-US", {
-      maximumFractionDigits: 0,
-      useGrouping: true,
-    });
-  };
+const formatNumber = (num: number) => {
+  return num.toLocaleString("en-US", { minimumIntegerDigits: 2 });
+};
+
+const App = () => {
+  const [spinCount, setSpinCount] = useState(getInitialSpinCount());
+  const [flare, setFlare] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSpinCount((prev) => prev + 1);
+    }, ANTONY_SPIN_RATE);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setFlare(true);
+    const timeout = setTimeout(() => setFlare(false), 500);
+    return () => clearTimeout(timeout);
+  }, [spinCount]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://www.instagram.com/antony00/?hl=en" target="_blank">
-          <img
-            src={
-              "https://media.tenor.com/NHLvSvpnDi4AAAAM/antony-antony-santos.gif"
-            }
-            className="logo antony"
-            alt="Antony logo"
-          />
-        </a>
-      </div>
-      <h1>Vite + React + Antony</h1>
-      <div className="card">
-        <button onClick={() => setCount(randomNumber())}>
-          count is {formatNumber(count)}
-        </button>
-        {count > 0 && (
-          <p>
-            I know you clicked but just dont care, I want to give you this value
-          </p>
-        )}
-        <p></p>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite, React, and Antony logos to learn more
-      </p>
-    </>
+    <div className="container">
+      <img src={antonySpin} alt="Antony" className="antony-img" />
+      <h5 className={`flare-text ${flare ? "flare" : ""}`}>
+        Respect his hard work! <br />
+        Today spin count: {formatNumber(spinCount)}
+      </h5>
+    </div>
   );
-}
+};
 
 export default App;
