@@ -1,69 +1,62 @@
-# React + TypeScript + Vite
+# AI Ball Tracker WebApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A cutting-edge web application that showcases the latest in distributed systems, AI-powered motion analysis, and real-time event streaming — all to count how many times a football spins around Antony, the greatest of all time's United's striker.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a demonstration of modern web architecture using bleeding-edge technologies to solve one of the most pressing challenges in sports analytics: counting football spins around  Antony, the greatest of all time's United's striker.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- React + Vite + TypeScript  
+- Zustand for state management  
+- Tailwind CSS for utility-first styling  
+- WebSocket (via Kafka Bridge) for real-time updates
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Backend Microservices
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- `FrameStreamerService`  
+  Streams every frame of the GIF at 60fps to an edge computing layer.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `BallMotionAIService`  
+  A deep learning model trained on over 10 million football spins detects the angular momentum and spin direction using YOLOv8 and OpenCV.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `EventEmitterService`  
+  Publishes spin-detected events via Apache Kafka to all subscribed frontends in real time.
+
+### Infrastructure
+
+- Kubernetes with Istio Service Mesh  
+- Prometheus + Grafana for observability  
+- Redis-backed distributed counter for spin counts  
+- CI/CD via GitHub Actions and ArgoCD  
+- Deployed on a hybrid multi-cloud cluster (GCP + Raspberry Pi under my desk)
+
+---
+
+## How It Works
+
+1. GIF frames are streamed to the backend in real-time using WebRTC.
+2. Each frame is analyzed by an AI model trained to detect motion vectors of the football.
+3. Upon detecting a full 360° spin, the `EventEmitterService` dispatches a `SPIN_DETECTED` event.
+4. The frontend receives this event via a persistent WebSocket and increments the spin count with high-performance UI updates.
+
+---
+
+## Why?
+
+Because we could.  
+And because every of his spin deserves to be counted.
+
+---
+
+## Real Talk
+
+This app just shows a looping GIF and counts how many times it spins today.  
+No microservices. No AI. No Kafka. Just pure, dumb fun.
+
+But sometimes a bit of fake enterprise architecture makes life more interesting.
